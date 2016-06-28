@@ -21,7 +21,7 @@ public class GAMain {
 
 		PrintTest(test1);
 
-
+		operator.RunOperator(test1);
 
 		PrintParents(operator,test1);
 

@@ -6,7 +6,7 @@ public class GAMain {
 	public static void main(String[] args){
 		Baggage bags = new Baggage();
 		GAPopulation test1 = new GAPopulation(bags);
-		GAOperator operator = new GAOperator(test1.PoplationSize);
+		GAOperator operator = new GAOperator(test1);
 
 		PrintBags(bags);
 
@@ -25,6 +25,8 @@ public class GAMain {
 
 		PrintParents(operator,test1);
 
+		
+		System.out.println("HogeTest" + 0xf5 + " " + (0xf5 >> 3 << 3));
 	}
 
 	public static void PrintBags(Baggage bags){
@@ -63,7 +65,7 @@ public class GAMain {
 		System.out.println("[Parents]");
 
 		for(int i=0;i<foo.PoplationSize;i++){
-			System.out.print(hoge.parents[i] + ":" + foo.Genes.get(hoge.parents[i]).getFitness() + " ");
+			System.out.print(hoge.parentlist[i] + ":" + foo.Genes.get(hoge.parentlist[i]).getFitness() + " ");
 		}
 		System.out.println();
 	}

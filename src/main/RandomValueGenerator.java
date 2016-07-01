@@ -22,4 +22,10 @@ public class RandomValueGenerator{
 	public static double MakeRandomValue(){	//0...0からmaxまで
 		return rnd.nextDouble();
 	}
+	
+	public static int MakeGtypePoint(int bits){	//交叉点の生成 1からbits-2までの値（二点交叉用）
+		int ans = rnd.nextInt(bits) - 1;
+		
+		return ans < 1 ? 1 : ans;
+	}
 }

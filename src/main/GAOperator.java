@@ -8,11 +8,21 @@ public class GAOperator {
 	public final double MUTATE = 1.00 - CROSSOVER;
 	//public final int NPOINT = 2;	//交叉点の数（２だと二点交叉）
 	public int[] parentlist;	//選択された親たちの配列番号
-	
+
 	public static void main(String[] arges){	//メソッドテスト用
-		
-		System.out.println(0xfb + " " + 0x3d + " " +TwoPointCrossover(0xfb,0x3d));
-		
+
+		hoge(0xfbba);
+		System.out.println();
+		hoge(0x3d49);
+		System.out.println();
+		hoge(TwoPointCrossover(0xfbba,0x3d49));
+		System.out.println();
+		//System.out.println(0xfb + " " + 0x3d + " " +TwoPointCrossover(0xfb,0x3d));
+
+		System.out.println("gheeoege");
+
+
+
 	}
 
 	public GAOperator(GAPopulation genes){
@@ -22,17 +32,26 @@ public class GAOperator {
 	public void RunOperator(GAPopulation genes){	//GAオペレーター処理の大きな部分（選択、交叉、変異とか）
 		double isCrossOver = MakeRandomValue();
 		double isMutate = MakeRandomValue();
+		int tmpChild = -1;
 		int parents = -1;
 
 		parentlist = RouletteSelect(genes);	//選択
 
 		if(isCrossOver <= CROSSOVER){
 			//交叉
+			int parent1,parent2;
 			parents = SelectParent(genes.PoplationSize,parentlist);
+			parent1 = (int)Math.floor(parents/genes.PoplationSize);
+			parent2 = parents%genes.PoplationSize;
+			System.out.println("paretes:parent1:parent2" + parent1 + parent2);
+			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype());
 		}
 		else if(isMutate <= MUTATE){
 			//突然変異
+
 		}
+		//致死遺伝子かどうか調べる
+
 	}
 
 	private void LinearScaling(){}	//線形スケーリング（実装しないでやってみる
@@ -65,35 +84,37 @@ public class GAOperator {
 			}
 		}
 		System.out.println("\n[[EndOfMethod RoutletSelect]]\n");
-		
+
 		return parents;
 	}
-	
+
 	private static int TwoPointCrossover(int parent1,int parent2){	//gtypeが引数
 		int ans = 0x00;
 		int tmp = 0x00;
 		int mask = -1;
 		int point1 = MakeGtypePoint(LENGTH);
 		int point2 = MakeGtypePoint(LENGTH);
-		
-		while(point1 == point2 || point1 == (point2 - 1) || point1 == (point2 + 1))	//交叉点の位置が隣接、同じじゃないようにする
+
+		while(point1 == point2 || point1 == (point2 - 1) || point1 == (point2 + 1))	//交叉点の位置が隣接、同じじゃないようにする(3bit以上交叉するようにする
 			point2 = MakeGtypePoint(LENGTH);
-		
+
 		if(point2 < point1){
 			int t = point1;
 			point1 = point2;
 			point2 = t;
 		}
-		
+
+		System.out.println(point1 + ":" + point2);
+
 		mask <<= (point2 - point1 + 1);
 		mask = ~mask;
-		
+
 		tmp = (parent2 >> point1) & mask;	//交叉点間のビットを取得（たぶん
-		
+
 		ans = (parent1 >> point2 + 1) << (point2 - point1 + 1) | tmp;
 		ans <<= point1;
 		ans |= (parent1) & ~(-1 << point1);
-		
+
 		return ans;
 	}
 
@@ -111,12 +132,27 @@ public class GAOperator {
 	}
 
 	private int SelectParent(int num,int parents[]){	//num:親の数
-		int parent1 = parents[MakeRandomValue(num)];
+		//ここ修正1016 sturedeyayする
+		int parent1 = parents[MakeRandomValue(num)];	//親の配列の添字を入れてる
 		int parent2 = parents[MakeRandomValue(num)];
-		
+
 		while(parent1 == parent2)	//同じ親を選択しないようにするため
 			parent2 = parents[MakeRandomValue(num)];
-		
+
 		return (parent1 * num + parent2);	//個体数進数
+	}
+
+	static void hoge(int foo){
+		char[] bitGtype = new char[LENGTH];
+		int mask = 0x01;
+
+		for(int i=0;i<LENGTH;i++){
+			if((foo & mask) == mask)
+				bitGtype[LENGTH-(i+1)] = '1';
+			else
+				bitGtype[LENGTH-(i+1)] = '0';
+			mask <<= 1;
+		}
+		System.out.print(bitGtype);
 	}
 }

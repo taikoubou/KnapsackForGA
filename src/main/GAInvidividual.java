@@ -47,6 +47,14 @@ public class GAInvidividual{
 	public void setFitness() {
 		this.fitness = ptype;
 	}
+	
+	public void setGtype(int gtype){
+		this.gtype = gtype;
+	}
+	
+	public int getGtype(){
+		return this.gtype;
+	}
 
 	public void PrintGtype(){
 		char[] bitGtype = new char[LENGTH];

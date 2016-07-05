@@ -1,5 +1,6 @@
 package main;
 
+import static main.Baggage.*;
 import static main.RandomValueGenerator.*;
 import static main.Constants.*;
 
@@ -10,19 +11,6 @@ public class GAOperator {
 	public int[] parentlist;	//選択された親たちの配列番号
 
 	public static void main(String[] arges){	//メソッドテスト用
-
-		hoge(0xfbba);
-		System.out.println();
-		hoge(0x3d49);
-		System.out.println();
-		hoge(TwoPointCrossover(0xfbba,0x3d49));
-		System.out.println();
-		//System.out.println(0xfb + " " + 0x3d + " " +TwoPointCrossover(0xfb,0x3d));
-
-		System.out.println("gheeoege");
-
-
-
 	}
 
 	public GAOperator(GAPopulation genes){
@@ -34,6 +22,7 @@ public class GAOperator {
 		double isMutate = MakeRandomValue();
 		int tmpChild = -1;
 		int parents = -1;
+		
 
 		parentlist = RouletteSelect(genes);	//選択
 
@@ -43,15 +32,18 @@ public class GAOperator {
 			parents = SelectParent(genes.PoplationSize,parentlist);
 			parent1 = (int)Math.floor(parents/genes.PoplationSize);
 			parent2 = parents%genes.PoplationSize;
-			System.out.println("paretes:parent1:parent2" + parent1 + parent2);
-			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype());
+			System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
+			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),MakeGtypePoint(LENGTH),MakeGtypePoint(LENGTH));
 		}
 		else if(isMutate <= MUTATE){
 			//突然変異
 
 		}
+		
 		//致死遺伝子かどうか調べる
-
+		if(isLethal(tmpChild)){
+			//ランダムに荷物捨てる処理
+		}
 	}
 
 	private void LinearScaling(){}	//線形スケーリング（実装しないでやってみる
@@ -88,12 +80,12 @@ public class GAOperator {
 		return parents;
 	}
 
-	private static int TwoPointCrossover(int parent1,int parent2){	//gtypeが引数
+	private int TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
 		int ans = 0x00;
 		int tmp = 0x00;
 		int mask = -1;
-		int point1 = MakeGtypePoint(LENGTH);
-		int point2 = MakeGtypePoint(LENGTH);
+		//int point1 = MakeGtypePoint(LENGTH);
+		//int point2 = MakeGtypePoint(LENGTH);
 
 		while(point1 == point2 || point1 == (point2 - 1) || point1 == (point2 + 1))	//交叉点の位置が隣接、同じじゃないようにする(3bit以上交叉するようにする
 			point2 = MakeGtypePoint(LENGTH);
@@ -116,6 +108,27 @@ public class GAOperator {
 		ans |= (parent1) & ~(-1 << point1);
 
 		return ans;
+	}
+	
+	private boolean isLethal(int gene){
+		boolean ans = false;
+		
+		if(G2Weight(gene) > MAX_BAG)
+			ans = true;
+		
+		return ans;
+	}
+	
+	public int G2Weight(int gtype){
+		int weighttmp = 0;
+		int mask = 0x01;
+
+		for(int i=0;i<LENGTH;i++){
+			if((gtype & mask) == mask)
+				weighttmp += weightTh[i];
+			mask <<= 1;
+		}
+		return weighttmp;
 	}
 
 	private double[] MakeRandomTable(GAPopulation genes){	//ルーレット選択に使うテーブルの生成でしてー

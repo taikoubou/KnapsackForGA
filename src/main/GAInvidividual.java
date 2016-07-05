@@ -2,6 +2,7 @@ package main;
 
 import static main.RandomValueGenerator.*;
 import static main.Constants.*;
+import static main.Baggage.*;
 
 //GAの個体を表すクラス
 public class GAInvidividual{
@@ -19,25 +20,25 @@ public class GAInvidividual{
 	public void MakeRandomGtype(Baggage bags){
 		do{
 			gtype = InitRandomGType(LENGTH);
-			DecodeGtype(bags);
+			DecodeGtype();
 		}while(weight > MAX_BAG);
 		//System.out.println("Init Gtype:" + gtype);
 	}
 
-	public void DecodeGtype(Baggage bags){
+	public void DecodeGtype(){
 		int ptype = 0;
-		int weight = 0;
+		int weighttmp = 0;
 		int mask = 0x01;
 
 		for(int i=0;i<LENGTH;i++){
 			if((gtype & mask) == mask){
-				ptype += bags.value[i];
-				weight += bags.weight[i];
+				ptype += value[i];
+				weighttmp += weightTh[i];
 			}
 			mask <<= 1;
 		}
 		this.ptype = ptype;
-		this.weight = weight;
+		this.weight = weighttmp;
 	}
 
 	public double getFitness() {

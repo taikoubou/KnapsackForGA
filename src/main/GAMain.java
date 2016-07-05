@@ -13,7 +13,7 @@ public class GAMain {
 		System.out.println("GA Population Test");
 
 		for(int i=0;i<test1.PoplationSize;i++){
-			test1.Genes.get(i).DecodeGtype(bags);
+			test1.Genes.get(i).DecodeGtype();
 			test1.Genes.get(i).setFitness();
 		}
 
@@ -26,7 +26,7 @@ public class GAMain {
 		PrintParents(operator,test1);
 
 		
-		System.out.println("HogeTest" + 0xf5 + " " + (0xf5 >> 3 << 3));
+		//System.out.println("HogeTest" + 0xf5 + " " + (0xf5 >> 3 << 3));
 	}
 
 	public static void PrintBags(Baggage bags){
@@ -34,7 +34,7 @@ public class GAMain {
 
 		System.out.print("[value, weight]={");
 		for(int i=0;i<LENGTH;i++){
-			System.out.print("[" + bags.value[i] + ", " + bags.weight[i] + "]");
+			System.out.print("[" + Baggage.value[i] + ", " + Baggage.weightTh[i] + "]");
 			if((i % 9 == 0) && i != 0)System.out.print("\n\t\t");
 		}
 		System.out.println("}");

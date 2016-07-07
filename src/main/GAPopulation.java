@@ -16,6 +16,10 @@ public class GAPopulation {
 			Genes.add(new GAInvidividual(bags));
 		}
 	}
+	
+	public GAPopulation(){
+		Genes.add(new GAInvidividual());
+	}
 
 	public void setMaxFitness(){
 		double ans = -1;
@@ -64,8 +68,5 @@ public class GAPopulation {
 		}
 
 		return ans;
-	}
-
-	public void GeneratePopulation(){	//新しい世代の生成
 	}
 }

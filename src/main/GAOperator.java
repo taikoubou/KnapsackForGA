@@ -5,8 +5,8 @@ import static main.RandomValueGenerator.*;
 import static main.Constants.*;
 
 public class GAOperator {
-	public final double CROSSOVER = 0.65;	//交叉率(突然変異率は 1-交叉率 で計算する)
-	public final double MUTATE = 1.00 - CROSSOVER;
+	public final double CROSSOVER = 0.65;	//交叉率
+	public final double MUTATE = 1/(double)LENGTH;
 	//public final int NPOINT = 2;	//交叉点の数（２だと二点交叉）
 	public int[] parentlist;	//選択された親たちの配列番号
 
@@ -19,11 +19,9 @@ public class GAOperator {
 
 	public void RunOperator(GAPopulation genes){	//GAオペレーター処理の大きな部分（選択、交叉、変異とか）
 		double isCrossOver = MakeRandomValue();
-		double isMutate = MakeRandomValue();
-		int tmpChild = -1;
+		int[] tmpChild = new int[10];
 		int parents = -1;
 		
-
 		parentlist = RouletteSelect(genes);	//選択
 
 		if(isCrossOver <= CROSSOVER){
@@ -35,10 +33,9 @@ public class GAOperator {
 			System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
 			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),MakeGtypePoint(LENGTH),MakeGtypePoint(LENGTH));
 		}
-		else if(isMutate <= MUTATE){
-			//突然変異
-
-		}
+		//突然変異
+		
+		Mutation(tmpChild);
 		
 		//致死遺伝子かどうか調べる
 		if(isLethal(tmpChild)){
@@ -57,7 +54,7 @@ public class GAOperator {
 		//for(int i=0;i<len;i++)
 			//System.out.print(table[i] + ",");
 
-		System.out.println("[[InMethod RoutletSelect]]");
+		//System.out.println("[[InMethod RoutletSelect]]");
 
 		for(int i=0;i<len;i++){		//同じ数の親を選択 O(n^2)でつらい
 			double rand = RouletteRandom(sumfit);	//0.1 <= x <= sumfitまでの乱数を生成
@@ -66,8 +63,8 @@ public class GAOperator {
 			for(int j=0;j<len;j++){
 				if(oldvalue < rand && rand <= table[j]){
 					parents[i] = j;
-					genes.Genes.get(j).PrintFitness();
-					System.out.print(" ");
+					//genes.Genes.get(j).PrintFitness();
+					//System.out.print(" ");
 					break;
 				}
 				else{
@@ -75,13 +72,13 @@ public class GAOperator {
 				}
 			}
 		}
-		System.out.println("\n[[EndOfMethod RoutletSelect]]\n");
+		//System.out.println("\n[[EndOfMethod RoutletSelect]]\n");
 
 		return parents;
 	}
 
-	private int TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
-		int ans = 0x00;
+	private int[] TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
+		int[] ans = {0x00,0x00};
 		int tmp = 0x00;
 		int mask = -1;
 		//int point1 = MakeGtypePoint(LENGTH);
@@ -96,16 +93,16 @@ public class GAOperator {
 			point2 = t;
 		}
 
-		System.out.println(point1 + ":" + point2);
+		//System.out.println(point1 + ":" + point2);
 
 		mask <<= (point2 - point1 + 1);
 		mask = ~mask;
 
 		tmp = (parent2 >> point1) & mask;	//交叉点間のビットを取得（たぶん
 
-		ans = (parent1 >> point2 + 1) << (point2 - point1 + 1) | tmp;
-		ans <<= point1;
-		ans |= (parent1) & ~(-1 << point1);
+		ans[0] = (parent1 >> point2 + 1) << (point2 - point1 + 1) | tmp;
+		ans[0] <<= point1;
+		ans[0] |= (parent1) & ~(-1 << point1);
 
 		return ans;
 	}
@@ -117,6 +114,21 @@ public class GAOperator {
 			ans = true;
 		
 		return ans;
+	}
+	
+	private int Mutation(int gene){
+		int tmp = gene;
+		int mask = 0x01;
+		
+		for(int i=0;i<LENGTH;i++){
+			double isMutate = MakeRandomValue();
+			
+			if(isMutate < MUTATE)
+				tmp ^= mask;
+			mask <<= 1;
+		}
+		
+		return tmp;
 	}
 	
 	public int G2Weight(int gtype){

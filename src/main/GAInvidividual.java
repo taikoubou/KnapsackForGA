@@ -16,6 +16,11 @@ public class GAInvidividual{
 		weight = 0;
 		MakeRandomGtype(bags);
 	}
+	
+	public GAInvidividual(){
+		weight = 0;
+		gtype = 0;
+	}
 
 	public void MakeRandomGtype(Baggage bags){
 		do{

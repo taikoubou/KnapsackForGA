@@ -27,20 +27,25 @@ public class GAOperator {
 		if(isCrossOver <= CROSSOVER){
 			//交叉
 			int parent1,parent2;
+			int point1 = MakeGtypePoint(LENGTH) , point2 = MakeGtypePoint(LENGTH);
 			parents = SelectParent(genes.PoplationSize,parentlist);
 			parent1 = (int)Math.floor(parents/genes.PoplationSize);
 			parent2 = parents%genes.PoplationSize;
 			System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
-			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),MakeGtypePoint(LENGTH),MakeGtypePoint(LENGTH));
+			
+			while(point1 == point2)		//交叉点が同じじゃないようにする
+				point2 = MakeGtypePoint(LENGTH);
+			
+			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),point1,point2);
 		}
 		//突然変異
 		
-		Mutation(tmpChild);
+		//Mutation(tmpChild);
 		
 		//致死遺伝子かどうか調べる
-		if(isLethal(tmpChild)){
+		//if(isLethal(tmpChild)){
 			//ランダムに荷物捨てる処理
-		}
+		//}
 	}
 
 	private void LinearScaling(){}	//線形スケーリング（実装しないでやってみる
@@ -77,15 +82,11 @@ public class GAOperator {
 		return parents;
 	}
 
-	private int[] TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
+	private static int[] TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
 		int[] ans = {0x00,0x00};
 		int tmp = 0x00;
+		int tmp2 = 0x00;
 		int mask = -1;
-		//int point1 = MakeGtypePoint(LENGTH);
-		//int point2 = MakeGtypePoint(LENGTH);
-
-		while(point1 == point2 || point1 == (point2 - 1) || point1 == (point2 + 1))	//交叉点の位置が隣接、同じじゃないようにする(3bit以上交叉するようにする
-			point2 = MakeGtypePoint(LENGTH);
 
 		if(point2 < point1){
 			int t = point1;
@@ -99,10 +100,15 @@ public class GAOperator {
 		mask = ~mask;
 
 		tmp = (parent2 >> point1) & mask;	//交叉点間のビットを取得（たぶん
+		tmp2 = (parent1 >> point1) & mask;
 
 		ans[0] = (parent1 >> point2 + 1) << (point2 - point1 + 1) | tmp;
 		ans[0] <<= point1;
 		ans[0] |= (parent1) & ~(-1 << point1);
+		
+		ans[1] = (parent2 >> point2 + 1) << (point2 - point1 + 1) | tmp2;
+		ans[1] <<= point1;
+		ans[1] |= (parent2) & ~(-1 << point1);
 
 		return ans;
 	}
@@ -179,5 +185,6 @@ public class GAOperator {
 			mask <<= 1;
 		}
 		System.out.print(bitGtype);
+		//return bitGtype;
 	}
 }

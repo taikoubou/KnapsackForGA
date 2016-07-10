@@ -24,9 +24,6 @@ public class GAMain {
 		operator.RunOperator(test1);
 
 		PrintParents(operator,test1);
-
-		
-		//System.out.println("HogeTest" + 0xf5 + " " + (0xf5 >> 3 << 3));
 	}
 
 	public static void PrintBags(Baggage bags){

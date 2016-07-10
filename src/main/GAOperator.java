@@ -40,7 +40,7 @@ public class GAOperator {
 		}
 		//突然変異
 		
-		//Mutation(tmpChild);
+		Mutation(tmpChild);
 		
 		//致死遺伝子かどうか調べる
 		//if(isLethal(tmpChild)){
@@ -82,7 +82,7 @@ public class GAOperator {
 		return parents;
 	}
 
-	private static int[] TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
+	private int[] TwoPointCrossover(int parent1,int parent2,int point1,int point2){	//gtypeが引数
 		int[] ans = {0x00,0x00};
 		int tmp = 0x00;
 		int tmp2 = 0x00;

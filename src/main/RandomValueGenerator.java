@@ -28,4 +28,8 @@ public class RandomValueGenerator{
 		
 		return ans < 1 ? 1 : ans;
 	}
+	
+	public static int MakeRandomDropPoint(int bits){	//ランダムで荷物を捨てるポイントを生成
+		return rnd.nextInt(bits);
+	}
 }

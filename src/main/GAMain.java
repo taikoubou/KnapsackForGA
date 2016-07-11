@@ -5,25 +5,33 @@ import static main.Constants.*;
 public class GAMain {
 	public static void main(String[] args){
 		Baggage bags = new Baggage();
-		GAPopulation test1 = new GAPopulation(bags);
+		GAPopulation test1 = new GAPopulation(bags);	//コンストラクタで初期世代を生成しているはず
 		GAOperator operator = new GAOperator(test1);
 
 		PrintBags(bags);
-
-		System.out.println("GA Population Test");
-
-		for(int i=0;i<test1.PoplationSize;i++){
-			test1.Genes.get(i).DecodeGtype();
-			test1.Genes.get(i).setFitness();
+		
+		System.out.println("Start GA!!");
+		
+		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness");
+		
+		for(long i=0;i<1000;i++){
+			test1.setAllFitness();
+			test1.setDataFitness();
+			
+			test1.PrintDataFitness((int)i);
+			
+			operator.setParentlist(test1);
+			
+			int[] newGenes = new int[10];
+			int[] tmpg = new int[2];
+			for(int j=0;j<10;j+=2){
+				tmpg = operator.RunOperator(test1);
+				newGenes[j] = tmpg[0];
+				newGenes[j+1] = tmpg[1]; 
+			}
+			
+			test1.NewGeneration(newGenes);
 		}
-
-		test1.setAllFitness();
-
-		PrintTest(test1);
-
-		operator.RunOperator(test1);
-
-		PrintParents(operator,test1);
 	}
 
 	public static void PrintBags(Baggage bags){
@@ -38,8 +46,8 @@ public class GAMain {
 	}
 
 	public static void PrintTest(GAPopulation hoge){
-		System.out.println("[Poplation]\nMaxFitness\tMinFitness\tAveFitness");
-		System.out.println(hoge.MaxFitness + "\t\t" + hoge.MinFitness + "\t\t" + hoge.AveFitness);
+		//System.out.println("[Poplation]\nMaxFitness\tMinFitness\tAveFitness");
+		//System.out.println(hoge.MaxFitness + "\t\t" + hoge.MinFitness + "\t\t" + hoge.AveFitness);
 
 		System.out.println("\n[Invidivial]");
 		System.out.println("Gtype\t\t\t\t\tPtype\tWeight\tFitness");

@@ -16,13 +16,17 @@ public class GAOperator {
 	public GAOperator(GAPopulation genes){
 		parentlist = new int[genes.PoplationSize];
 	}
+	
+	public void setParentlist(GAPopulation genes){
+		parentlist = RouletteSelect(genes);
+	}
 
-	public void RunOperator(GAPopulation genes){	//GAオペレーター処理の大きな部分（選択、交叉、変異とか）
+	public int[] RunOperator(GAPopulation genes){	//GAオペレーター処理の大きな部分（選択、交叉、変異とか）
 		double isCrossOver = MakeRandomValue();
-		int[] tmpChild = new int[10];
+		int[] tmpChild = new int[2];
 		int parents = -1;
 		
-		parentlist = RouletteSelect(genes);	//選択
+		//parentlist = RouletteSelect(genes);	//選択
 
 		if(isCrossOver <= CROSSOVER){
 			//交叉
@@ -31,7 +35,7 @@ public class GAOperator {
 			parents = SelectParent(genes.PoplationSize,parentlist);
 			parent1 = (int)Math.floor(parents/genes.PoplationSize);
 			parent2 = parents%genes.PoplationSize;
-			System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
+			//System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
 			
 			while(point1 == point2)		//交叉点が同じじゃないようにする
 				point2 = MakeGtypePoint(LENGTH);
@@ -39,16 +43,25 @@ public class GAOperator {
 			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),point1,point2);
 		}
 		//突然変異
-		
-		Mutation(tmpChild);
+		tmpChild = Mutation(tmpChild);
 		
 		//致死遺伝子かどうか調べる
-		//if(isLethal(tmpChild)){
+		if(isLethal(tmpChild[0])){
 			//ランダムに荷物捨てる処理
-		//}
+			do{
+				tmpChild[0] = geneDrop(tmpChild[0]);
+			}while(isLethal(tmpChild[0]));
+		}
+		if(isLethal(tmpChild[1])){
+			do{
+				tmpChild[1] = geneDrop(tmpChild[1]);
+			}while(isLethal(tmpChild[1]));
+		}
+		
+		return tmpChild;
 	}
 
-	private void LinearScaling(){}	//線形スケーリング（実装しないでやってみる
+	//private void LinearScaling(){}	//線形スケーリング（実装しないでやってみる
 
 	private int[] RouletteSelect(GAPopulation genes){		//ルーレット選択
 		int len = genes.PoplationSize;
@@ -113,6 +126,19 @@ public class GAOperator {
 		return ans;
 	}
 	
+	private int geneDrop(int gene){
+		int dropPoint = MakeRandomDropPoint(LENGTH);
+		int mask = 0x01;
+		
+		mask <<= dropPoint;
+		
+		if((gene & mask) == mask){
+			gene ^= mask;
+		}
+		
+		return gene;
+	}
+	
 	private boolean isLethal(int gene){
 		boolean ans = false;
 		
@@ -122,19 +148,26 @@ public class GAOperator {
 		return ans;
 	}
 	
-	private int Mutation(int gene){
-		int tmp = gene;
+	private int[] Mutation(int gene[]){
 		int mask = 0x01;
 		
 		for(int i=0;i<LENGTH;i++){
 			double isMutate = MakeRandomValue();
 			
 			if(isMutate < MUTATE)
-				tmp ^= mask;
+				gene[0] ^= mask;
+			mask <<= 1;
+		}
+		mask = 0x01;
+		for(int i=0;i<LENGTH;i++){
+			double isMutate = MakeRandomValue();
+			
+			if(isMutate < MUTATE)
+				gene[1] ^= mask;
 			mask <<= 1;
 		}
 		
-		return tmp;
+		return gene;
 	}
 	
 	public int G2Weight(int gtype){

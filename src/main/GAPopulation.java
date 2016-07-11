@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class GAPopulation {
 	public ArrayList<GAInvidividual> Genes = new ArrayList<GAInvidividual>();
-	public double MaxFitness;
-	public double MinFitness;
-	public double AveFitness;
+	private double MaxFitness;
+	private double MinFitness;
+	private double AveFitness;
 
 	public int PoplationSize = 10;
 
@@ -19,6 +19,13 @@ public class GAPopulation {
 	
 	public GAPopulation(){
 		Genes.add(new GAInvidividual());
+	}
+	
+	public void setAllFitness(){
+		int N = Genes.size();
+		
+		for(int i=0;i<N;i++)
+			Genes.get(i).setFitness();
 	}
 
 	public void setMaxFitness(){
@@ -54,10 +61,21 @@ public class GAPopulation {
 		AveFitness = sum/(double)N;
 	}
 
-	public void setAllFitness(){
+	public void setDataFitness(){
 		setMaxFitness();
 		setMinFitness();
 		setAveFitness();
+	}
+	
+	public void NewGeneration(int genes[]){
+		int N = Genes.size();
+		
+		for(int i=0;i<N;i++)
+			Genes.get(i).setGtype(genes[i]);
+	}
+	
+	public void PrintDataFitness(int n){
+		System.out.println(n + "\t" + this.MaxFitness + "\t\t" + this.MinFitness + "\t\t" + this.AveFitness);
 	}
 
 	public double getSumFitness(){

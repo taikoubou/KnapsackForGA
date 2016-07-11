@@ -14,12 +14,14 @@ public class GAInvidividual{
 
 	public GAInvidividual(Baggage bags){
 		weight = 0;
+		ptype = -1;
 		MakeRandomGtype(bags);
 	}
 	
 	public GAInvidividual(){
 		weight = 0;
 		gtype = 0;
+		ptype = -1;
 	}
 
 	public void MakeRandomGtype(Baggage bags){
@@ -30,7 +32,7 @@ public class GAInvidividual{
 		//System.out.println("Init Gtype:" + gtype);
 	}
 
-	public void DecodeGtype(){
+	private void DecodeGtype(){
 		int ptype = 0;
 		int weighttmp = 0;
 		int mask = 0x01;
@@ -51,6 +53,8 @@ public class GAInvidividual{
 	}
 
 	public void setFitness() {
+		//if(ptype == -1)
+		DecodeGtype();
 		this.fitness = ptype;
 	}
 	

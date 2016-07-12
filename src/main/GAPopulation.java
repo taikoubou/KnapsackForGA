@@ -1,15 +1,16 @@
 package main;
 
 import java.util.ArrayList;
-//import static main.Constants.*;
+import static main.Constants.*;
 
 public class GAPopulation {
 	public ArrayList<GAInvidividual> Genes = new ArrayList<GAInvidividual>();
 	private double MaxFitness;
 	private double MinFitness;
 	private double AveFitness;
+	private int EliteGtype;
 
-	public int PoplationSize = 10;
+	public int PoplationSize = POPLATIONSIZE;
 
 	public GAPopulation(Baggage bags){	//初期世代の生成
 		for(int i=0;i<PoplationSize;i++){
@@ -30,14 +31,17 @@ public class GAPopulation {
 
 	public void setMaxFitness(){
 		double ans = -1;
+		int Eg = 0;
 		int N = Genes.size();
 
 		for(int i=0;i<N;i++){
 			if(ans < Genes.get(i).getFitness()){
 				ans = Genes.get(i).getFitness();
+				Eg = Genes.get(i).getGtype();
 			}
 		}
 		MaxFitness = ans;
+		EliteGtype = Eg;
 	}
 
 	public void setMinFitness(){
@@ -59,6 +63,10 @@ public class GAPopulation {
 		sum = this.getSumFitness();
 
 		AveFitness = sum/(double)N;
+	}
+	
+	public int getEliteGtype(){
+		return this.EliteGtype;
 	}
 
 	public void setDataFitness(){

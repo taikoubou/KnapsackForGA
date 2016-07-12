@@ -14,7 +14,7 @@ public class GAMain {
 		
 		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness");
 		
-		for(long i=0;i<1000;i++){
+		for(long i=0;i<10000;i++){
 			test1.setAllFitness();
 			test1.setDataFitness();
 			
@@ -22,13 +22,15 @@ public class GAMain {
 			
 			operator.setParentlist(test1);
 			
-			int[] newGenes = new int[10];
+			int[] newGenes = new int[POPLATIONSIZE];
 			int[] tmpg = new int[2];
-			for(int j=0;j<10;j+=2){
+			for(int j=0;j<POPLATIONSIZE-1;j+=2){
 				tmpg = operator.RunOperator(test1);
 				newGenes[j] = tmpg[0];
 				newGenes[j+1] = tmpg[1]; 
 			}
+			
+			newGenes[POPLATIONSIZE-1] = test1.getEliteGtype();
 			
 			test1.NewGeneration(newGenes);
 		}

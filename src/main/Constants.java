@@ -13,4 +13,5 @@ public class Constants {
 	//Bags
 	public static final int MAX_WEIGHT = 50;	//1つあたりの荷物の最大の重量
 	public static final int MAX_VALUE = 50;		//1つあたりの荷物の最大の価値
+	public static final String FILE = "data1.txt";	//データファイル
 }

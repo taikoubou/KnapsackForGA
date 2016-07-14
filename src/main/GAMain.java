@@ -4,7 +4,7 @@ import static main.Constants.*;
 
 public class GAMain {
 	public static void main(String[] args){
-		Baggage bags = new Baggage();
+		Baggage bags = new Baggage(FILE);
 		GAPopulation test1 = new GAPopulation(bags);	//コンストラクタで初期世代を生成しているはず
 		GAOperator operator = new GAOperator(test1);
 
@@ -14,7 +14,7 @@ public class GAMain {
 		
 		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness");
 		
-		for(long i=0;i<10000;i++){
+		for(long i=0;i<1500;i++){
 			test1.setAllFitness();
 			test1.setDataFitness();
 			

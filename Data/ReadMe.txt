@@ -1,0 +1,4 @@
+readme
+
+テストデータの大きさはConstantsのLENGTHの値に依存する
+大きさの違うデータを利用する時はLENGTHの値を変えてからBaggageクラスのmakeBagDataメソッドでデータを生成してからGAを走らせること

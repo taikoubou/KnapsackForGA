@@ -6,11 +6,12 @@ import static main.Constants.*;
 
 public class GAOperator {
 	public final double CROSSOVER = 0.65;	//交叉率
-	public final double MUTATE = 0.10;
+	public final double MUTATE = 0.1;
 	//public final int NPOINT = 2;	//交叉点の数（２だと二点交叉）
 	public int[] parentlist;	//選択された親たちの配列番号
 
 	public static void main(String[] arges){	//メソッドテスト用
+		//System.out.println(geneDrop(0xf));
 	}
 
 	public GAOperator(GAPopulation genes){
@@ -24,23 +25,20 @@ public class GAOperator {
 	public int[] RunOperator(GAPopulation genes){	//GAオペレーター処理の大きな部分（選択、交叉、変異とか）
 		double isCrossOver = MakeRandomValue();
 		int[] tmpChild = new int[2];
-		int parents = -1;
+		//int parents = -1;
 		
 		//parentlist = RouletteSelect(genes);	//選択
 
 		if(isCrossOver <= CROSSOVER){
 			//交叉
-			int parent1,parent2;
+			int[] parents = {-1,-1};
 			int point1 = MakeGtypePoint(LENGTH) , point2 = MakeGtypePoint(LENGTH);
 			parents = SelectParent(genes.PoplationSize,parentlist);
-			parent1 = (int)Math.floor(parents/genes.PoplationSize);
-			parent2 = parents%genes.PoplationSize;
-			//System.out.println("paretes:parent1:parent2" + parents + parent1 + parent2);
 			
 			while(point1 == point2)		//交叉点が同じじゃないようにする
 				point2 = MakeGtypePoint(LENGTH);
 			
-			tmpChild = TwoPointCrossover(genes.Genes.get(parent1).getGtype(),genes.Genes.get(parent2).getGtype(),point1,point2);
+			tmpChild = TwoPointCrossover(genes.Genes.get(parents[0]).getGtype(),genes.Genes.get(parents[1]).getGtype(),point1,point2);
 		}
 		//突然変異
 		tmpChild = Mutation(tmpChild);
@@ -144,6 +142,7 @@ public class GAOperator {
 		
 		if(G2Weight(gene) > MAX_BAG)
 			ans = true;
+		else ans = false;
 		
 		return ans;
 	}
@@ -195,18 +194,22 @@ public class GAOperator {
 		return ans;
 	}
 
-	private int SelectParent(int num,int parents[]){	//num:親の数
+	private int[] SelectParent(int num,int parents[]){	//num:親の数
 		//ここ修正1016 sturedeyayする
 		int parent1 = parents[MakeRandomValue(num)];	//親の配列の添字を入れてる
 		int parent2 = parents[MakeRandomValue(num)];
+		int[] tmp = new int[2];
 
 		while(parent1 == parent2)	//同じ親を選択しないようにするため
 			parent2 = parents[MakeRandomValue(num)];
+		
+		tmp[0] = parent1;
+		tmp[1] = parent2;
 
-		return (parent1 * num + parent2);	//個体数進数
+		return tmp;	//個体数進数
 	}
 
-	static void hoge(int foo){
+	public void PrintGtype(int foo){
 		char[] bitGtype = new char[LENGTH];
 		int mask = 0x01;
 

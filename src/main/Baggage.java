@@ -43,6 +43,15 @@ public class Baggage{
 		return data;
 	}
 	
+	public int getSumWeight(){
+		int ans = 0;
+		
+		for(int i=0;i<LENGTH;i++)
+			ans += weightTh[i];
+		
+		return ans;
+	}
+	
 	public static void makeBagData(){
 		for(int i=0;i<LENGTH;i++){
 			System.out.println(MakeRandomValue(MAX_WEIGHT) + " " + MakeRandomValue(MAX_VALUE));

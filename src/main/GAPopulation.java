@@ -75,15 +75,23 @@ public class GAPopulation {
 		setAveFitness();
 	}
 	
+	private void resetData(){
+		MaxFitness = 0.0;
+		MinFitness = 1e16;
+		AveFitness = 0.0;
+	}
+	
 	public void NewGeneration(int genes[]){
 		int N = Genes.size();
 		
 		for(int i=0;i<N;i++)
 			Genes.get(i).setGtype(genes[i]);
+		
+		resetData();
 	}
 	
 	public void PrintDataFitness(int n){
-		System.out.println(n + "\t" + this.MaxFitness + "\t\t" + this.MinFitness + "\t\t" + this.AveFitness);
+		System.out.print(n + "\t" + this.MaxFitness + "\t\t" + this.MinFitness + "\t\t" + this.AveFitness);
 	}
 
 	public double getSumFitness(){

@@ -8,13 +8,13 @@ public class GAMain {
 		GAPopulation test1 = new GAPopulation(bags);	//コンストラクタで初期世代を生成しているはず
 		GAOperator operator = new GAOperator(test1);
 
-		PrintBags(bags);
+		System.out.println("DataFile:" + FILE);
 		
 		System.out.println("Start GA!!");
 		
-		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness");
+		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness\t\tEliteGtype");
 		
-		for(long i=0;i<1500;i++){
+		for(long i=0;i<1000;i++){
 			test1.setAllFitness();
 			test1.setDataFitness();
 			
@@ -31,6 +31,9 @@ public class GAMain {
 			}
 			
 			newGenes[POPLATIONSIZE-1] = test1.getEliteGtype();
+			System.out.print("\t");
+			operator.PrintGtype(newGenes[POPLATIONSIZE -1]);
+			System.out.println();
 			
 			test1.NewGeneration(newGenes);
 		}

@@ -8,7 +8,7 @@ public class Constants {
 	public static final int MAX_BAG = 450;	//かばんの最大重量
 
 	//GAPopulation
-	public static final int POPLATIONSIZE = 51;
+	public static final int POPLATIONSIZE = 11;
 
 	//Bags
 	public static final int MAX_WEIGHT = 50;	//1つあたりの荷物の最大の重量

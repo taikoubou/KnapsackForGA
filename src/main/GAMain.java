@@ -12,9 +12,9 @@ public class GAMain {
 		
 		System.out.println("Start GA!!");
 		
-		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness\t\tEliteGtype");
+		System.out.println("N\tMaxFitness\tMinFitness\tAveFitness\tMinAveFitness\tEliteGtype");
 		
-		for(long i=0;i<1000;i++){
+		for(long i=0;i<5000;i++){
 			test1.setAllFitness();
 			test1.setDataFitness();
 			

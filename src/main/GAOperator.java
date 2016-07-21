@@ -7,7 +7,6 @@ import static main.Constants.*;
 public class GAOperator {
 	public final double CROSSOVER = 0.65;	//交叉率
 	public final double MUTATE = 0.1;
-	//public final int NPOINT = 2;	//交叉点の数（２だと二点交叉）
 	public int[] parentlist;	//選択された親たちの配列番号
 
 	public static void main(String[] arges){	//メソッドテスト用
@@ -206,7 +205,7 @@ public class GAOperator {
 		tmp[0] = parent1;
 		tmp[1] = parent2;
 
-		return tmp;	//個体数進数
+		return tmp;
 	}
 
 	public void PrintGtype(int foo){

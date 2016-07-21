@@ -47,6 +47,10 @@ public class GAInvidividual{
 		this.ptype = ptype;
 		this.weight = weighttmp;
 	}
+	
+	public double getPtype(){
+		return this.ptype;
+	}
 
 	public double getFitness() {
 		return fitness;
